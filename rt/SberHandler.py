@@ -3,6 +3,14 @@ from .Handler import Handler
 
 class SberHandler(Handler):
 
+    def get_user(self, request: dict):
+        uuid = request.get('uuid')
+
+        if uuid is None:
+            return None
+
+        return uuid.get('userId')
+
     def get_utterance(self, request: dict):
         payload = request.get('payload')
 

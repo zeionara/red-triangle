@@ -3,6 +3,19 @@ from .Handler import Handler
 
 class VkHandler(Handler):
 
+    def get_user(self, request: dict):
+        session = request.get('session')
+
+        if session is None:
+            return None
+
+        application = session.get('application')
+
+        if application is None:
+            return None
+
+        return application.get('application_id')
+
     def get_utterance(self, request: dict):
         request_body = request.get('request')
 

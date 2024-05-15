@@ -5,6 +5,7 @@ from .HuggingFaceClient import HuggingFaceClient
 from .Handler import Handler
 from .VkHandler import VkHandler
 from .SberHandler import SberHandler
+from .YandexHandler import YandexHandler
 
 
 class Server:
@@ -16,6 +17,7 @@ class Server:
 
         self.vk = VkHandler(client)
         self.sber = SberHandler(client)
+        self.yandex = YandexHandler(client)
 
     def serve(self, host = '0.0.0.0', port = 1217):
         app = self.app
@@ -29,7 +31,10 @@ class Server:
             return handler.handle(request_json)
 
         @app.route('/', methods = ['POST'])
-        def ask_vk():
+        def ask_vk_and_yandex():
+            if self.yandex.can_handle(request.json):
+                return handle(self.yandex)
+
             return handle(self.vk)
 
         @app.route('/app-connector', methods = ['POST'])
