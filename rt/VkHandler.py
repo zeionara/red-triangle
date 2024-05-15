@@ -11,11 +11,20 @@ class VkHandler(Handler):
 
         return request_body.get('command')
 
+    def is_stop(self, utterance: str):
+        return utterance == 'on_interrupt' or super().is_stop(utterance)
+
     def make_response(self, request: dict, message: str, end_session: bool = False):
         return {
             "response": {
-                "text": message,
-                "tts": message,
+                'commands': [
+                    {
+                        'type': 'TTS',
+                        'text': message,
+                        'tts': message,
+                        'voice': 'vasilisa-hifigan'
+                    }
+                ],
                 "end_session": end_session
             },
             "session": request.get('session'),

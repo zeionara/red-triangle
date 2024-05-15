@@ -8,14 +8,14 @@ from .VkHandler import VkHandler
 
 class Server:
     def __init__(self, model: str):
-        self.app = app = Flask(__name__)
+        self.app = app = Flask('Red triangle')
         app.json.ensure_ascii = False
 
         self.client = client = HuggingFaceClient.make(model = model)
 
         self.vk = VkHandler(client)
 
-    def start(self, host = '0.0.0.0', port = 1217):
+    def serve(self, host = '0.0.0.0', port = 1217):
         app = self.app
 
         def handle(handler: Handler):

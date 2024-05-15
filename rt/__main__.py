@@ -23,8 +23,8 @@ def ask(message: str):
 
 @main.command()
 @argument('model', type = str, default = DEFAULT_MODEL)
-def start(model: str):
-    Server(model).start()
+def serve(model: str):
+    Server(model).serve()
 
 
 if __name__ == '__main__':
