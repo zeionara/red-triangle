@@ -1,6 +1,8 @@
 from flask import Flask, request
 
 from .HuggingFaceClient import HuggingFaceClient
+from .OpenAIClient import OpenAIClient
+from .Client import ClientType
 
 from .UserTracker import UserTracker
 from .VkHandler import VkHandler
@@ -9,11 +11,17 @@ from .YandexHandler import YandexHandler
 
 
 class Server:
-    def __init__(self, model: str):
+    def __init__(self, model: str = None, client: ClientType = ClientType.HUGGINGFACE):
         self.app = app = Flask('Red triangle')
         app.json.ensure_ascii = False
 
-        self.client = client = HuggingFaceClient.make(model = model)
+        match client:
+            case ClientType.HUGGINGFACE:
+                self.client = client = HuggingFaceClient.make(model = model)
+            case ClientType.OPENAI:
+                self.client = client = OpenAIClient.make(model = model)
+            case client_type:
+                raise ValueError(f'Unknown client type {client_type}')
 
         self.vk = UserTracker(VkHandler(client))
         self.sber = UserTracker(SberHandler(client))

@@ -1,11 +1,9 @@
-from click import group, argument
+from click import group, argument, option, Choice
 
 from .HuggingFaceClient import HuggingFaceClient
+from .OpenAIClient import OpenAIClient
 from .Server import Server
-
-
-# DEFAULT_MODEL = 'zlsl/l_erotic_kink_chat'
-DEFAULT_MODEL = 'Qwen/Qwen1.5-0.5B'
+from .Client import ClientType, MessageHistory
 
 
 @group()
@@ -15,16 +13,25 @@ def main():
 
 @main.command()
 @argument('message', type = str)
-def ask(message: str):
-    # client = HuggingFaceClient.make(model = 'Qwen/Qwen1.5-0.5B')
-    client = HuggingFaceClient.make(model = DEFAULT_MODEL)
-    print(client.ask(message))
+@option('--model', type = str)
+@option('--client', type = Choice([client.value for client in ClientType], case_sensitive = False), default = ClientType.HUGGINGFACE.value)
+def ask(message: str, model: str, client: str):
+    match ClientType(client):
+        case ClientType.HUGGINGFACE:
+            client = HuggingFaceClient.make(model = model)
+        case ClientType.OPENAI:
+            client = OpenAIClient.make(model = model)
+        case client_type:
+            raise ValueError(f'Unknown client type: {client_type}')
+
+    print(client.ask(MessageHistory().push(message)))
 
 
 @main.command()
-@argument('model', type = str, default = DEFAULT_MODEL)
-def serve(model: str):
-    Server(model).serve()
+@option('--model', type = str)
+@option('--client', type = Choice([client.value for client in ClientType], case_sensitive = False), default = ClientType.HUGGINGFACE.value)
+def serve(model: str, client: str):
+    Server(model, ClientType(client)).serve()
 
 
 if __name__ == '__main__':

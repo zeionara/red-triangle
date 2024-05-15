@@ -5,6 +5,9 @@ from requests import post
 from .Client import Client, MessageHistory
 
 
+DEFAULT_MODEL = 'Qwen/Qwen1.5-0.5B'
+
+
 class HuggingFaceClient(Client):
     def __init__(self, model: str, token: str):
         super().__init__()
@@ -13,7 +16,7 @@ class HuggingFaceClient(Client):
         self.token = token
 
     def ask(self, history: MessageHistory):
-        print(history.describe())
+        # print(history.describe())
 
         response = post(
             self.url,
@@ -29,7 +32,10 @@ class HuggingFaceClient(Client):
         return response.json()
 
     @classmethod
-    def make(cls, model: str):
+    def make(cls, model: str = None):
+        if model is None:
+            model = DEFAULT_MODEL
+
         return cls(model, token = env.get('HUGGING_FACE_INFERENCE_API_TOKEN'))
 
     @property

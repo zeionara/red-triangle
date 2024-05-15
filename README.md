@@ -19,5 +19,5 @@ python -m rt ask 'Есть такой анекдот'
 To run `http` server which would allow you to interact with the smart speaker and generate responses using external models, use the following command:
 
 ```sh
-python -m rt start
+python -m rt serve
 ```

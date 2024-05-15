@@ -3,6 +3,11 @@ from dataclasses import dataclass
 from abc import abstractmethod, ABC
 
 
+class ClientType(Enum):
+    HUGGINGFACE = 'huggingface'
+    OPENAI = 'openai'
+
+
 class Agent(Enum):
     ASSISTANT = 'assistant'
     USER = 'user'
@@ -24,6 +29,7 @@ class MessageHistory:
 
     def push(self, text: str, agent: Agent = Agent.USER):
         self.items.append(Message(text, agent))
+        return self
 
     def describe(self):
         return '\n'.join(message.describe() for message in self.items)
@@ -37,6 +43,9 @@ class MessageHistory:
                 utterance = message.text
 
         return utterance
+
+    def __iter__(self):
+        return iter(self.items)
 
 
 class Client(ABC):
