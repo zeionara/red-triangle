@@ -2,9 +2,13 @@ from os import environ as env
 
 from requests import post
 
+from .Client import Client
 
-class HuggingFaceClient:
+
+class HuggingFaceClient(Client):
     def __init__(self, model: str, token: str):
+        super().__init__()
+
         self.model = model
         self.token = token
 
