@@ -2,12 +2,16 @@ from flask import Flask, request
 
 from .HuggingFaceClient import HuggingFaceClient
 from .OpenAIClient import OpenAIClient
+from .OpenChatClient import OpenChatClient
 from .Client import ClientType
 
 from .UserTracker import UserTracker
 from .VkHandler import VkHandler
 from .SberHandler import SberHandler
 from .YandexHandler import YandexHandler
+
+
+DEFAULT_PORT = 1217
 
 
 class Server:
@@ -20,6 +24,8 @@ class Server:
                 self.client = client = HuggingFaceClient.make(model = model)
             case ClientType.OPENAI:
                 self.client = client = OpenAIClient.make(model = model)
+            case ClientType.OPENCHAT:
+                self.client = client = OpenChatClient.make(model = model)
             case client_type:
                 raise ValueError(f'Unknown client type {client_type}')
 
@@ -27,7 +33,7 @@ class Server:
         self.sber = UserTracker(SberHandler(client))
         self.yandex = UserTracker(YandexHandler(client))
 
-    def serve(self, host = '0.0.0.0', port = 1217):
+    def serve(self, host = '0.0.0.0', port = DEFAULT_PORT):
         app = self.app
 
         def handle(tracker: UserTracker):

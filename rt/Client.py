@@ -6,6 +6,7 @@ from abc import abstractmethod, ABC
 class ClientType(Enum):
     HUGGINGFACE = 'huggingface'
     OPENAI = 'openai'
+    OPENCHAT = 'openchat'
 
 
 class Agent(Enum):
