@@ -2,7 +2,7 @@ from os import environ as env
 
 from requests import post
 
-from .Client import Client
+from .Client import Client, MessageHistory
 
 
 class HuggingFaceClient(Client):
@@ -12,12 +12,14 @@ class HuggingFaceClient(Client):
         self.model = model
         self.token = token
 
-    def ask(self, message: str):
+    def ask(self, history: MessageHistory):
+        print(history.describe())
+
         response = post(
             self.url,
             headers = self.headers,
             json = {
-                'inputs': message
+                'inputs': history.last_utterance
             }
         )
 

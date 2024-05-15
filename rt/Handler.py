@@ -1,11 +1,15 @@
 from abc import abstractmethod, ABC
 
-from .Client import Client
+from .Client import Client, MessageHistory
 
 
 class Handler(ABC):
     def __init__(self, client: Client):
         self.client = client
+
+    @abstractmethod
+    def get_user(self, request: dict):
+        pass
 
     @abstractmethod
     def get_utterance(self, request: dict):
@@ -21,7 +25,7 @@ class Handler(ABC):
     def is_init(self, utterance: str):
         return 'навык' in utterance or 'скилл' in utterance or 'skill' in utterance
 
-    def handle(self, request: dict):
+    def handle(self, request: dict, history: MessageHistory):
         utterance = self.get_utterance(request)
 
         if self.is_stop(utterance):
@@ -29,4 +33,4 @@ class Handler(ABC):
         if self.is_init(utterance):
             return self.make_response(request, 'Задайте ваш вопрос, а я постараюсь на него ответить')
 
-        return self.make_response(request, self.client.ask(utterance))
+        return self.make_response(request, self.client.ask(history))

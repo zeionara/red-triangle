@@ -42,4 +42,4 @@ class SberHandler(Handler):
                 'finished': end_session,
                 'device': payload.get('device')
             }
-        }
+        }, message

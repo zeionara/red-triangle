@@ -42,4 +42,4 @@ class VkHandler(Handler):
             },
             "session": request.get('session'),
             "version": request.get('version')
-        }
+        }, message

@@ -62,4 +62,4 @@ class YandexHandler(Handler):
             if (application_state := state.get('application')) is not None:
                 response['application_state'] = application_state
 
-        return response
+        return response, message
