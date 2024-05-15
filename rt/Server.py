@@ -4,6 +4,7 @@ from .HuggingFaceClient import HuggingFaceClient
 
 from .Handler import Handler
 from .VkHandler import VkHandler
+from .SberHandler import SberHandler
 
 
 class Server:
@@ -14,6 +15,7 @@ class Server:
         self.client = client = HuggingFaceClient.make(model = model)
 
         self.vk = VkHandler(client)
+        self.sber = SberHandler(client)
 
     def serve(self, host = '0.0.0.0', port = 1217):
         app = self.app
@@ -29,5 +31,9 @@ class Server:
         @app.route('/', methods = ['POST'])
         def ask_vk():
             return handle(self.vk)
+
+        @app.route('/app-connector', methods = ['POST'])
+        def ask_sber():
+            return handle(self.sber)
 
         app.run(host = host, port = port)
