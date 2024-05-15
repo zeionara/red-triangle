@@ -2,48 +2,32 @@ from flask import Flask, request
 
 from .HuggingFaceClient import HuggingFaceClient
 
+from .Handler import Handler
+from .VkHandler import VkHandler
+
 
 class Server:
     def __init__(self, model: str):
         self.app = app = Flask(__name__)
         app.json.ensure_ascii = False
 
-        self.client = HuggingFaceClient.make(model = model)
+        self.client = client = HuggingFaceClient.make(model = model)
+
+        self.vk = VkHandler(client)
 
     def start(self, host = '0.0.0.0', port = 1217):
         app = self.app
 
-        @app.route('/', methods = ['POST'])
-        def ask():
+        def handle(handler: Handler):
             request_json = request.json
+            utterance = handler.get_utterance(request_json)
 
-            request_body = request_json['request']
-            text = request_body['command']
+            print(f'Got user utterance: "{utterance}"')
 
-            print(f'Got text "{text}"')
+            return handler.handle(request_json)
 
-            if 'стоп' in text:
-                response = 'Завершаю сессию'
-                end_session = True
-            elif 'навык' in text:
-                response = 'Задайте ваш вопрос, а я постараюсь на него ответить'
-                end_session = False
-            else:
-                response = self.client.ask(text)
-                end_session = False
-
-            result = {
-                "response": {
-                    "text": response,
-                    "tts": response,
-                    "end_session": end_session
-                },
-                "session": request_json.get('session'),
-                "version": request_json.get('version')
-            }
-
-            print(result)
-
-            return result
+        @app.route('/', methods = ['POST'])
+        def ask_vk():
+            return handle(self.vk)
 
         app.run(host = host, port = port)
