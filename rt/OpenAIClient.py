@@ -24,7 +24,7 @@ class OpenAIClient(Client):
 
         self.model = model
         self.token = token
-        self.client = OpenAI(token)
+        self.client = OpenAI(api_key = token)
 
     def ask(self, history: MessageHistory):
         completion = self.client.chat.completions.create(
