@@ -1,5 +1,9 @@
 # Red triangle
 
+<p align="center">
+    <img src="assets/logo.jpeg"/>
+</p>
+
 A web server for accessing generative language models from a smart speaker
 
 ## Eager mode
