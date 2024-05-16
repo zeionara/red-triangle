@@ -25,6 +25,9 @@ class Handler(ABC):
     def is_init(self, utterance: str):
         return 'навык' in utterance or 'скилл' in utterance or 'skill' in utterance
 
+    def is_help(self, utterance: str):
+        return 'можешь' in utterance or 'умеешь' in utterance or 'помощь' in utterance
+
     def handle(self, request: dict, history: MessageHistory):
         utterance = self.get_utterance(request)
 
@@ -32,5 +35,7 @@ class Handler(ABC):
             return self.make_response(request, 'Завершаю сессию', end_session = True)
         if self.is_init(utterance):
             return self.make_response(request, 'Задайте ваш вопрос, а я постараюсь на него ответить')
+        if self.is_help(utterance):
+            return self.make_response(request, 'Я могу побеседовать с вами на любую тему, просто задайте вопрос')
 
         return self.make_response(request, self.client.ask(history))

@@ -22,7 +22,7 @@ class UserTracker:
             if (history := self.histories.get(user)) is None:
                 self.histories[user] = history = MessageHistory()
 
-            if (is_not_init := not handler.is_init(utterance)):
+            if (is_not_init := (not handler.is_init(utterance) and not handler.is_help(utterance))):
                 history.push(utterance)
                 # print(history.describe())
 
