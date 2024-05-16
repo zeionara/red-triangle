@@ -20,14 +20,13 @@ def encode_agent(agent: Agent):
 
 
 class OpenChatClient(Client):
-    def __init__(self, model: str, token: str, host: str, port: int):
+    def __init__(self, model: str, host: str, port: int):
         super().__init__()
 
         self.host = host
         self.port = port
 
         self.model = model
-        self.token = token
 
     @property
     def url(self):
@@ -53,4 +52,4 @@ class OpenChatClient(Client):
         if model is None:
             model = DEFAULT_MODEL
 
-        return cls(model, token = env.get('OPENAI_API_KEY'), host = env.get('OPENCHAT_HOST'), port = int(env.get('OPENCHAT_PORT')))
+        return cls(model, host = env.get('OPENCHAT_HOST'), port = int(env.get('OPENCHAT_PORT')))

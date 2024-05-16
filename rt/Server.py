@@ -1,9 +1,7 @@
 from flask import Flask, request
 
-from .HuggingFaceClient import HuggingFaceClient
-from .OpenAIClient import OpenAIClient
-from .OpenChatClient import OpenChatClient
 from .Client import ClientType
+from .ClientFactory import ClientFactory
 
 from .UserTracker import UserTracker
 from .VkHandler import VkHandler
@@ -19,15 +17,7 @@ class Server:
         self.app = app = Flask('Red triangle')
         app.json.ensure_ascii = False
 
-        match client:
-            case ClientType.HUGGINGFACE:
-                self.client = client = HuggingFaceClient.make(model = model)
-            case ClientType.OPENAI:
-                self.client = client = OpenAIClient.make(model = model)
-            case ClientType.OPENCHAT:
-                self.client = client = OpenChatClient.make(model = model)
-            case client_type:
-                raise ValueError(f'Unknown client type {client_type}')
+        self.client = client = ClientFactory.make(client, model)
 
         self.vk = UserTracker(VkHandler(client))
         self.sber = UserTracker(SberHandler(client))
@@ -47,6 +37,12 @@ class Server:
         @app.route('/', methods = ['POST'])
         def ask_vk_and_yandex():
             if self.yandex.handler.can_handle(request.json):
+                utterance = self.yandex.handler.get_utterance(request.json)
+
+                if utterance == 'ping':
+                    response, _ = self.yandex.handler.make_response(request.json, '')
+                    return response
+
                 return handle(self.yandex)
 
             return handle(self.vk)

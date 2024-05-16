@@ -7,6 +7,7 @@ class ClientType(Enum):
     HUGGINGFACE = 'huggingface'
     OPENAI = 'openai'
     OPENCHAT = 'openchat'
+    CUSTOMIZED_OPENCHAT = 'customized-openchat'
 
 
 class Agent(Enum):
