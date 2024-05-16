@@ -37,6 +37,9 @@ class Server:
         @app.route('/', methods = ['POST'])
         def ask_vk_and_yandex():
             if self.yandex.handler.can_handle(request.json):
+                response, _ = self.yandex.handler.make_response(request.json, 'Ведутся технические работы, попробуйте позже')
+                return response
+
                 utterance = self.yandex.handler.get_utterance(request.json)
 
                 if utterance == 'ping':
