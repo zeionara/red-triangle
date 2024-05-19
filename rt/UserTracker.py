@@ -1,3 +1,5 @@
+from pyautogui import hotkey
+
 from .Handler import Handler
 from .Client import MessageHistory, Agent
 
@@ -11,6 +13,11 @@ class UserTracker:
     def handle(self, request: dict):
         handler = self.handler
         utterance = handler.get_utterance(request)
+
+        if handler.has_skill_keyword(utterance):
+            hotkey('ctrl', 'shift', 'alt', 'a')
+
+            return handler.make_response(request, '', end_session = True)[0]
 
         user = handler.get_user(request)
         history = None

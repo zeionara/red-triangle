@@ -32,7 +32,9 @@ class Server:
 
             print(f'Got utterance "{utterance}" from user "{tracker.handler.get_user(request_json)}"')
 
-            return tracker.handle(request_json)
+            response = tracker.handle(request_json)
+
+            return response
 
         @app.route('/', methods = ['POST'])
         def ask_vk_and_yandex():

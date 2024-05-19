@@ -28,6 +28,9 @@ class Handler(ABC):
     def is_help(self, utterance: str):
         return 'можешь' in utterance or 'умеешь' in utterance or 'помощь' in utterance
 
+    def has_skill_keyword(self, utterance: str):
+        return 'skill' in utterance or 'скилл' in utterance
+
     def handle(self, request: dict, history: MessageHistory):
         utterance = self.get_utterance(request)
 
