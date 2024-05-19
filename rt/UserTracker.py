@@ -9,17 +9,28 @@ class UserTracker:
     def __init__(self, handler: Handler):
         self.handler = handler
         self.histories = {}
+        self.voice_channel_states = {}
 
     def handle(self, request: dict):
         handler = self.handler
         utterance = handler.get_utterance(request)
 
+        user = handler.get_user(request)
+
         if handler.has_skill_keyword(utterance):
-            hotkey('ctrl', 'shift', 'alt', 'a')
+            # print('Connected to voice channel:', self.voice_channel_states.get(user))
+
+            if not self.voice_channel_states.get(user):
+                # print('connecting...')
+                self.voice_channel_states[user] = True
+                hotkey('ctrl', 'shift', 'alt', 'a')
+            else:
+                # print('disconnecting...')
+                self.voice_channel_states[user] = False
+                hotkey('ctrl', 'shift', 'alt', 'b')
 
             return handler.make_response(request, '', end_session = True)[0]
 
-        user = handler.get_user(request)
         history = None
         is_not_init = None
 
