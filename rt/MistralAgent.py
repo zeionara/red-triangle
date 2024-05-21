@@ -59,7 +59,7 @@ class MistralAgent:
         return messages[-1].text
 
     def new_chat(self):
-        if not self.has_chat:
+        if not self.initialized:
             raise ValueError('The agent has not been started')
 
         self.has_chat = False
