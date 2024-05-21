@@ -23,7 +23,7 @@ class MistralAgent:
 
         # textarea.send_keys(Keys.ENTER)
 
-    def start(self, initial_prompt: str = 'hello, what can you do?'):
+    def start(self):
         if self.initialized:
             raise ValueError('The agent has already started')
 
@@ -39,6 +39,8 @@ class MistralAgent:
 
         if not self.initialized:
             self.initialized = True
+
+        return self
 
     def ask(self, prompt: str):
         if not self.initialized:
