@@ -6,16 +6,17 @@ from selenium.webdriver.common.by import By
 
 
 class MistralAgent:
-    def __init__(self, cookies: dict, response_wait_interval: int = 5, initialization_interval: int = 2, chat_initialization_interval: int = 1):
+    def __init__(self, cookies: dict, response_wait_interval: int = 5, initialization_interval: int = 2, chat_initialization_interval: int = 0, chat_switch_interval: int = 1):
         self.cookies = cookies
         self.driver = webdriver.Chrome()
 
         self.response_wait_interval = response_wait_interval
         self.chat_initialization_interval = chat_initialization_interval
         self.initialization_interval = initialization_interval
+        self.chat_switch_interval = chat_switch_interval
 
         self.initialized = False
-        self.has_chat = False
+        self.chat = None
 
     def _submit(self, _textarea):
         button = self.driver.find_element(by = By.XPATH, value = "//button[@type='submit']")
@@ -49,12 +50,14 @@ class MistralAgent:
         textarea = self.driver.find_element(by = By.TAG_NAME, value = 'textarea')
         textarea.send_keys(prompt)
 
-        if not self.has_chat:
+        if self.chat is None and self.chat_initialization_interval > 0:
             sleep(self.chat_initialization_interval)
-            self.has_chat = True
 
         self._submit(textarea)
         sleep(self.response_wait_interval)
+
+        if self.chat is None:
+            self.chat = self.driver.current_url
 
         messages = self.driver.find_elements(by = By.CLASS_NAME, value = 'prose-neutral')
 
@@ -64,7 +67,17 @@ class MistralAgent:
         if not self.initialized:
             raise ValueError('The agent has not been started')
 
-        self.has_chat = False
+        self.chat = None
         self.driver.get('https://chat.mistral.ai/chat')
 
         sleep(self.initialization_interval)
+
+    def to_chat(self, chat: str):
+        if chat is None or chat == self.chat:
+            return
+
+        self.chat = chat
+        self.driver.get(chat)
+
+        if self.chat_switch_interval > 0:
+            sleep(self.chat_switch_interval)

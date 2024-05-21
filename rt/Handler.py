@@ -1,4 +1,5 @@
 from abc import abstractmethod, ABC
+from threading import RLock
 
 from .Client import Client, MessageHistory
 from .Agent import Agent
@@ -8,6 +9,7 @@ class Handler(ABC):
     def __init__(self, client: Client, agent: Agent = None):
         self.client = client
         self.agent = agent
+        self.agent_lock = RLock()
 
     @abstractmethod
     def get_user(self, request: dict):
@@ -33,12 +35,13 @@ class Handler(ABC):
     def has_skill_keyword(self, utterance: str):
         return 'skill' in utterance or 'скилл' in utterance
 
-    def handle(self, request: dict, history: MessageHistory):
+    def handle(self, request: dict, history: MessageHistory, chat: str = None):
         utterance = self.get_utterance(request)
 
         if self.is_stop(utterance):
             if self.agent is not None:
-                self.agent.new_chat()
+                with self.agent_lock:
+                    self.agent.new_chat()
 
             return self.make_response(request, 'Завершаю сессию', end_session = True)
         if self.is_init(utterance):
@@ -49,4 +52,11 @@ class Handler(ABC):
         if self.agent is None:
             return self.make_response(request, self.client.ask(history))
 
-        return self.make_response(request, self.agent.ask(utterance))
+        with self.agent_lock:
+            if chat is None:
+                if self.agent.chat is not None:
+                    self.agent.new_chat()
+            else:
+                self.agent.to_chat(chat)
+
+            return self.make_response(request, self.agent.ask(utterance))[0], self.agent.chat

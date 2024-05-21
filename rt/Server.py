@@ -24,7 +24,7 @@ class Server:
             self.agent = agent = None
         else:
             self.client = client = None
-            self.agent = agent = AgentFactory.make(agent, response_wait_interval = 3).start()
+            self.agent = agent = AgentFactory.make(agent, response_wait_interval = 2).start()
 
         self.vk = UserTracker(VkHandler(client, agent))
         self.sber = UserTracker(SberHandler(client, agent))

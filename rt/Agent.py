@@ -18,3 +18,7 @@ class Agent(ABC):
     @abstractmethod
     def new_chat(self):
         pass
+
+    @abstractmethod
+    def to_chat(self, chat: str):
+        pass
