@@ -1,7 +1,9 @@
 from flask import Flask, request
 
 from .Client import ClientType
+from .Agent import AgentType
 from .ClientFactory import ClientFactory
+from .AgentFactory import AgentFactory
 
 from .UserTracker import UserTracker
 from .VkHandler import VkHandler
@@ -13,15 +15,20 @@ DEFAULT_PORT = 1217
 
 
 class Server:
-    def __init__(self, model: str = None, client: ClientType = ClientType.HUGGINGFACE):
+    def __init__(self, model: str = None, client: ClientType = ClientType.HUGGINGFACE, agent: AgentType = None):
         self.app = app = Flask('Red triangle')
         app.json.ensure_ascii = False
 
-        self.client = client = ClientFactory.make(client, model)
+        if agent is None:
+            self.client = client = ClientFactory.make(client, model)
+            self.agent = agent = None
+        else:
+            self.client = client = None
+            self.agent = agent = AgentFactory.make(agent, response_wait_interval = 3).start()
 
-        self.vk = UserTracker(VkHandler(client))
-        self.sber = UserTracker(SberHandler(client))
-        self.yandex = UserTracker(YandexHandler(client))
+        self.vk = UserTracker(VkHandler(client, agent))
+        self.sber = UserTracker(SberHandler(client, agent))
+        self.yandex = UserTracker(YandexHandler(client, agent))
 
     def serve(self, host = '0.0.0.0', port = DEFAULT_PORT):
         app = self.app

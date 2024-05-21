@@ -1,11 +1,13 @@
 from abc import abstractmethod, ABC
 
 from .Client import Client, MessageHistory
+from .Agent import Agent
 
 
 class Handler(ABC):
-    def __init__(self, client: Client):
+    def __init__(self, client: Client, agent: Agent = None):
         self.client = client
+        self.agent = agent
 
     @abstractmethod
     def get_user(self, request: dict):
@@ -35,10 +37,16 @@ class Handler(ABC):
         utterance = self.get_utterance(request)
 
         if self.is_stop(utterance):
+            if self.agent is not None:
+                self.agent.new_chat()
+
             return self.make_response(request, 'Завершаю сессию', end_session = True)
         if self.is_init(utterance):
             return self.make_response(request, 'Задайте ваш вопрос, а я постараюсь на него ответить')
         if self.is_help(utterance):
             return self.make_response(request, 'Я могу побеседовать с вами на любую тему, просто задайте вопрос')
 
-        return self.make_response(request, self.client.ask(history))
+        if self.agent is None:
+            return self.make_response(request, self.client.ask(history))
+
+        return self.make_response(request, self.agent.ask(utterance))
