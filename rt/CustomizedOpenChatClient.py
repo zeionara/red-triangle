@@ -3,17 +3,19 @@ from os import environ as env
 from requests import post
 
 from .Client import Client, MessageHistory
+from .util import ask_to_generate_concise_response
 
 
 TIMEOUT = 3600
 
 
 class CustomizedOpenChatClient(Client):
-    def __init__(self, host: str, port: int):
+    def __init__(self, host: str, port: int, concise: bool = False):
         super().__init__()
 
         self.host = host
         self.port = port
+        self.concise = concise
 
     @property
     def url(self):
@@ -23,7 +25,7 @@ class CustomizedOpenChatClient(Client):
         response = post(
             self.url,
             json = {
-                'query': history.last_utterance
+                'query': ask_to_generate_concise_response(history.last_utterance) if self.concise else history.last_utterance
             },
             timeout = TIMEOUT
         )
@@ -31,5 +33,5 @@ class CustomizedOpenChatClient(Client):
         return response.json()['response']
 
     @classmethod
-    def make(cls):
-        return cls(host = env.get('OPENCHAT_HOST'), port = int(env.get('OPENCHAT_PORT')))
+    def make(cls, concise: bool = False):
+        return cls(host = env.get('OPENCHAT_HOST'), port = int(env.get('OPENCHAT_PORT')), concise = concise)

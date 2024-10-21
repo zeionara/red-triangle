@@ -15,14 +15,17 @@ DEFAULT_PORT = 1217
 
 
 class Server:
-    def __init__(self, model: str = None, client: ClientType = ClientType.HUGGINGFACE, agent: AgentType = None):
+    def __init__(self, model: str = None, client: ClientType = ClientType.HUGGINGFACE, agent: AgentType = None, concise: bool = False):
         self.app = app = Flask('Red triangle')
         app.json.ensure_ascii = False
 
         if agent is None:
-            self.client = client = ClientFactory.make(client, model)
+            self.client = client = ClientFactory.make(client, model, concise = concise)
             self.agent = agent = None
         else:
+            if concise:
+                raise NotImplementedError('Concise option is not supported for agents')
+
             self.client = client = None
             self.agent = agent = AgentFactory.make(agent, response_wait_interval = 2).start()
 
