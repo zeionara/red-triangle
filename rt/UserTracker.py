@@ -1,4 +1,4 @@
-from pyautogui import hotkey
+# from pyautogui import hotkey
 
 from .Handler import Handler
 from .Client import MessageHistory, Agent
@@ -28,11 +28,11 @@ class UserTracker:
             if not self.voice_channel_states.get(user):
                 # print('connecting...')
                 self.voice_channel_states[user] = True
-                hotkey('ctrl', 'shift', 'alt', 'a')
+                # hotkey('ctrl', 'shift', 'alt', 'a')
             else:
                 # print('disconnecting...')
                 self.voice_channel_states[user] = False
-                hotkey('ctrl', 'shift', 'alt', 'b')
+                # hotkey('ctrl', 'shift', 'alt', 'b')
 
             return handler.make_response(request, '', end_session = True)[0]
 
