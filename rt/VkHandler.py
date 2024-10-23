@@ -35,7 +35,7 @@ class VkHandler(Handler):
                         'type': 'TTS',
                         'text': message,
                         'tts': message,
-                        'voice': 'maria-serious'
+                        'voice': 'vasilisa-hifigan'
                     }
                 ],
                 "end_session": end_session

@@ -9,7 +9,7 @@ from .CustomizedOpenChatClient import CustomizedOpenChatClient
 class ClientFactory:
 
     @staticmethod
-    def make(client_type: ClientType, model: str = None, concise: bool = False):
+    def make(client_type: ClientType, model: str = None, concise: bool = False, collection: str = None):
         match client_type:
             case ClientType.HUGGINGFACE:
                 return HuggingFaceClient.make(model = model)
@@ -18,6 +18,6 @@ class ClientFactory:
             case ClientType.OPENCHAT:
                 return OpenChatClient.make(model = model, concise = concise)
             case ClientType.CUSTOMIZED_OPENCHAT:
-                return CustomizedOpenChatClient.make(concise = concise)
+                return CustomizedOpenChatClient.make(concise = concise, collection = collection)
             case client_type:
                 raise ValueError(f'Unknown client type: {client_type}')

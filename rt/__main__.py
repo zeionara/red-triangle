@@ -37,8 +37,9 @@ def ask(message: str, model: str, client: str, agent: str):
 @option('-a', '--agent', type = Choice([agent.value for agent in AgentType], case_sensitive = True), default = None)
 @option('-p', '--port', type = int, default = DEFAULT_PORT)
 @option('-s', '--concise', is_flag = True)
-def serve(model: str, client: str, agent: str, port: int, concise: bool):
-    Server(model, ClientType(client), None if agent is None else AgentType(agent), concise = concise).serve(port = port)
+@option('-l', '--collection', type = str)
+def serve(model: str, client: str, agent: str, port: int, concise: bool, collection: str):
+    Server(model, ClientType(client), None if agent is None else AgentType(agent), concise = concise, collection = collection).serve(port = port)
 
 
 if __name__ == '__main__':

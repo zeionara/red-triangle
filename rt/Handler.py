@@ -45,7 +45,7 @@ class Handler(ABC):
 
             return self.make_response(request, 'Завершаю сессию', end_session = True)
         if self.is_init(utterance):
-            return self.make_response(request, 'Задайте ваш вопрос, а я постараюсь на него ответить')
+            return self.make_response(request, 'Задайте ваш вопрос, а я попробую на него ответить')
         if self.is_help(utterance):
             return self.make_response(request, 'Я могу побеседовать с вами на любую тему, просто задайте вопрос')
 

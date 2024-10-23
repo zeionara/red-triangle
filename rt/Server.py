@@ -15,12 +15,12 @@ DEFAULT_PORT = 1217
 
 
 class Server:
-    def __init__(self, model: str = None, client: ClientType = ClientType.HUGGINGFACE, agent: AgentType = None, concise: bool = False):
+    def __init__(self, model: str = None, client: ClientType = ClientType.HUGGINGFACE, agent: AgentType = None, concise: bool = False, collection: str = None):
         self.app = app = Flask('Red triangle')
         app.json.ensure_ascii = False
 
         if agent is None:
-            self.client = client = ClientFactory.make(client, model, concise = concise)
+            self.client = client = ClientFactory.make(client, model, concise = concise, collection = collection)
             self.agent = agent = None
         else:
             if concise:

@@ -22,19 +22,19 @@ class UserTracker:
 
         user = handler.get_user(request)
 
-        if handler.has_skill_keyword(utterance):
-            # print('Connected to voice channel:', self.voice_channel_states.get(user))
+        # if handler.has_skill_keyword(utterance):
+        #     # print('Connected to voice channel:', self.voice_channel_states.get(user))
 
-            if not self.voice_channel_states.get(user):
-                # print('connecting...')
-                self.voice_channel_states[user] = True
-                # hotkey('ctrl', 'shift', 'alt', 'a')
-            else:
-                # print('disconnecting...')
-                self.voice_channel_states[user] = False
-                # hotkey('ctrl', 'shift', 'alt', 'b')
+        #     if not self.voice_channel_states.get(user):
+        #         # print('connecting...')
+        #         self.voice_channel_states[user] = True
+        #         # hotkey('ctrl', 'shift', 'alt', 'a')
+        #     else:
+        #         # print('disconnecting...')
+        #         self.voice_channel_states[user] = False
+        #         # hotkey('ctrl', 'shift', 'alt', 'b')
 
-            return handler.make_response(request, '', end_session = True)[0]
+        #     return handler.make_response(request, '', end_session = True)[0]
 
         history = None
         is_not_init = None
