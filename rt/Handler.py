@@ -50,6 +50,7 @@ class Handler(ABC):
             return self.make_response(request, 'Завершаю сессию', end_session = True)
         if self.is_init(utterance):
             if isinstance(self.client, CreepyOpenChatClient):
+                history.reset()
                 return self.make_response(request, self.client.ask(history))
 
             return self.make_response(request, 'Задайте ваш вопрос, а я попробую на него ответить')

@@ -2,6 +2,7 @@
 
 from .Handler import Handler
 from .Client import MessageHistory, Agent
+from .CreepyOpenChatClient import CreepyOpenChatClient
 
 
 def looks_like_url(message: str):
@@ -57,7 +58,7 @@ class UserTracker:
         if handler.agent is not None and looks_like_url(message):
             self.chats[user] = message
 
-        if history is not None and is_not_init:  # it is unnecessary to check if handler.agent is None here
+        if history is not None and (is_not_init or isinstance(self.handler.client, CreepyOpenChatClient)):  # it is unnecessary to check if handler.agent is None here
             history.push(message, Agent.ASSISTANT)
 
         return response

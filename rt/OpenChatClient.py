@@ -10,11 +10,12 @@ DEFAULT_MODEL = 'openchat_v3.2_gemma_new'
 TIMEOUT = 3600
 
 ENCODED_USER_AGENT = 'user'
+ENCODED_ASSISTANT_AGENT = 'assistant'
 
 
 def encode_agent(agent: Agent):
     if agent == Agent.ASSISTANT:
-        return 'assistant'
+        return ENCODED_ASSISTANT_AGENT
 
     if agent == Agent.USER:
         return ENCODED_USER_AGENT

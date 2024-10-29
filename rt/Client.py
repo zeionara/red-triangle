@@ -30,6 +30,9 @@ class MessageHistory:
     def __init__(self):
         self.items = []
 
+    def reset(self):
+        self.items = []
+
     def push(self, text: str, agent: Agent = Agent.USER):
         self.items.append(Message(text, agent))
         return self
@@ -49,6 +52,9 @@ class MessageHistory:
 
     def __iter__(self):
         return iter(self.items)
+
+    def __len__(self):
+        return len(self.items)
 
 
 class Client(ABC):
