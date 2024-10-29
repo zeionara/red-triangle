@@ -8,6 +8,7 @@ class ClientType(Enum):
     OPENAI = 'openai'
     OPENCHAT = 'openchat'
     CUSTOMIZED_OPENCHAT = 'customized-openchat'
+    CREEPY_OPENCHAT = 'creepy-openchat'
 
 
 class Agent(Enum):

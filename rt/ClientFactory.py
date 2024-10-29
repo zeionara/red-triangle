@@ -4,6 +4,7 @@ from .HuggingFaceClient import HuggingFaceClient
 from .OpenAIClient import OpenAIClient
 from .OpenChatClient import OpenChatClient
 from .CustomizedOpenChatClient import CustomizedOpenChatClient
+from .CreepyOpenChatClient import CreepyOpenChatClient
 
 
 class ClientFactory:
@@ -19,5 +20,7 @@ class ClientFactory:
                 return OpenChatClient.make(model = model, concise = concise)
             case ClientType.CUSTOMIZED_OPENCHAT:
                 return CustomizedOpenChatClient.make(concise = concise, collection = collection)
+            case ClientType.CREEPY_OPENCHAT:
+                return CreepyOpenChatClient.make(model = model, concise = concise)
             case client_type:
                 raise ValueError(f'Unknown client type: {client_type}')
