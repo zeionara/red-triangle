@@ -4,11 +4,13 @@ from abc import abstractmethod, ABC
 
 
 class ClientType(Enum):
+    MISTRAL = 'mistral'
     HUGGINGFACE = 'huggingface'
     OPENAI = 'openai'
     OPENCHAT = 'openchat'
     CUSTOMIZED_OPENCHAT = 'customized-openchat'
     CREEPY_OPENCHAT = 'creepy-openchat'
+    CREEPY_MISTRAL = 'creepy-mistral'
 
 
 class Agent(Enum):

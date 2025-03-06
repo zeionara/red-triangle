@@ -5,6 +5,8 @@ from .OpenAIClient import OpenAIClient
 from .OpenChatClient import OpenChatClient
 from .CustomizedOpenChatClient import CustomizedOpenChatClient
 from .CreepyOpenChatClient import CreepyOpenChatClient
+from .MistralClient import MistralClient
+from .CreepyMistralClient import CreepyMistralClient
 
 
 class ClientFactory:
@@ -12,6 +14,8 @@ class ClientFactory:
     @staticmethod
     def make(client_type: ClientType, model: str = None, concise: bool = False, collection: str = None):
         match client_type:
+            case ClientType.MISTRAL:
+                return MistralClient.make(model = model)
             case ClientType.HUGGINGFACE:
                 return HuggingFaceClient.make(model = model)
             case ClientType.OPENAI:
@@ -22,5 +26,7 @@ class ClientFactory:
                 return CustomizedOpenChatClient.make(concise = concise, collection = collection)
             case ClientType.CREEPY_OPENCHAT:
                 return CreepyOpenChatClient.make(model = model, concise = concise)
+            case ClientType.CREEPY_MISTRAL:
+                return CreepyMistralClient.make(model = model, concise = concise)
             case client_type:
                 raise ValueError(f'Unknown client type: {client_type}')

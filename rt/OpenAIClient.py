@@ -1,6 +1,6 @@
 from os import environ as env
 
-from openai import OpenAI
+# from openai import OpenAI
 
 from .Client import Client, MessageHistory, Agent
 
