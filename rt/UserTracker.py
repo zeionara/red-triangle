@@ -1,4 +1,4 @@
-from pyautogui import hotkey
+# from pyautogui import hotkey
 
 from .Handler import Handler
 from .Client import MessageHistory, Agent

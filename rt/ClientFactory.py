@@ -4,6 +4,7 @@ from .HuggingFaceClient import HuggingFaceClient
 from .OpenAIClient import OpenAIClient
 from .OpenChatClient import OpenChatClient
 from .CustomizedOpenChatClient import CustomizedOpenChatClient
+from .MistralClient import MistralClient
 
 
 class ClientFactory:
@@ -11,6 +12,8 @@ class ClientFactory:
     @staticmethod
     def make(client_type: ClientType, model: str = None, concise: bool = False):
         match client_type:
+            case ClientType.MISTRAL:
+                return MistralClient.make(model = model)
             case ClientType.HUGGINGFACE:
                 return HuggingFaceClient.make(model = model)
             case ClientType.OPENAI:
