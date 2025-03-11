@@ -3,6 +3,7 @@ from threading import RLock
 
 from .Client import Client, MessageHistory
 from .CreepyOpenChatClient import CreepyOpenChatClient
+from .CreepyMistralClient import CreepyMistralClient
 from .Agent import Agent
 
 
@@ -44,18 +45,18 @@ class Handler(ABC):
                 with self.agent_lock:
                     self.agent.new_chat()
 
-            if isinstance(self.client, CreepyOpenChatClient):
+            if isinstance(self.client, (CreepyOpenChatClient, CreepyMistralClient)):
                 return self.make_response(request, 'Тёмной ночи тебе, странник', end_session = True)
 
             return self.make_response(request, 'Завершаю сессию', end_session = True)
         if self.is_init(utterance):
-            if isinstance(self.client, CreepyOpenChatClient):
+            if isinstance(self.client, (CreepyOpenChatClient, CreepyMistralClient)):
                 history.reset()
                 return self.make_response(request, self.client.ask(history))
 
             return self.make_response(request, 'Задайте ваш вопрос, а я попробую на него ответить')
         if self.is_help(utterance):
-            if isinstance(self.client, CreepyOpenChatClient):
+            if isinstance(self.client, (CreepyOpenChatClient, CreepyMistralClient)):
                 return self.make_response(request, 'Я могу рассказать тебе жуткую историю')
 
             return self.make_response(request, 'Я могу побеседовать с вами на любую тему, просто задайте вопрос')
