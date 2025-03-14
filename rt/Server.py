@@ -11,11 +11,15 @@ from .SberHandler import SberHandler
 from .YandexHandler import YandexHandler
 
 
-DEFAULT_PORT = 1217
+DEFAULT_HTTP_PORT = 1217
+DEFAULT_HTTPS_PORT = 443
 
 
 class Server:
-    def __init__(self, model: str = None, client: ClientType = ClientType.HUGGINGFACE, agent: AgentType = None, concise: bool = False, collection: str = None):
+    def __init__(
+        self, model: str = None, client: ClientType = ClientType.HUGGINGFACE, agent: AgentType = None, concise: bool = False, collection: str = None,
+        ssl_key: str = None, ssl_cert: str = None
+    ):
         self.app = app = Flask('Red triangle')
         app.json.ensure_ascii = False
 
@@ -33,7 +37,20 @@ class Server:
         self.sber = UserTracker(SberHandler(client, agent))
         self.yandex = UserTracker(YandexHandler(client, agent))
 
-    def serve(self, host = '0.0.0.0', port = DEFAULT_PORT):
+        if ssl_cert and not ssl_key or not ssl_cert and ssl_key:
+            raise ValueError('Both ssl key and ssl cert must be provided')
+
+        self.ssl_key = ssl_key
+        self.ssl_cert = ssl_cert
+
+    @property
+    def ssl_context(self):
+        if self.ssl_cert is None or self.ssl_key is None:
+            return None
+
+        return (self.ssl_cert, self.ssl_key)
+
+    def serve(self, host = '0.0.0.0', port = None):
         app = self.app
 
         def handle(tracker: UserTracker):
@@ -66,4 +83,4 @@ class Server:
         def ask_sber():
             return handle(self.sber)
 
-        app.run(host = host, port = port)
+        app.run(host = host, port = DEFAULT_HTTP_PORT if port is None and self.ssl_context is None else DEFAULT_HTTPS_PORT if port is None else port, ssl_context = self.ssl_context)
