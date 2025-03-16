@@ -41,3 +41,42 @@ To generate ssl keys (for testing):
 ```sh
 openssl req -x509 -newkey rsa:4096 -nodes -out cert.pem -keyout key.pem -days 365
 ```
+
+To [generate ssl keys](https://certbot.eff.org/instructions?ws=webproduct&os=pip) (for production):
+
+```sh
+sudo apt update
+sudo apt install python3 python3-venv libaugeas0
+
+sudo python3 -m venv /opt/certbot/
+sudo /opt/certbot/bin/pip install --upgrade pip
+
+sudo /opt/certbot/bin/pip install certbot
+sudo ln -s /opt/certbot/bin/certbot /usr/bin/certbot
+
+sudo certbot certonly --standalone
+```
+
+Output of `sudo certbot certonly --standalone` should look like this:
+
+```
+Saving debug log to /var/log/letsencrypt/letsencrypt.log
+Please enter the domain name(s) you would like on your certificate (comma and/or
+space separated) (Enter 'c' to cancel): zeio.ru zeio.online
+Requesting a certificate for zeio.ru and zeio.online
+
+Successfully received certificate.
+Certificate is saved at: /etc/letsencrypt/live/zeio.ru/fullchain.pem
+Key is saved at:         /etc/letsencrypt/live/zeio.ru/privkey.pem
+This certificate expires on 2025-06-14.
+These files will be updated when the certificate renews.
+
+NEXT STEPS:
+- The certificate will need to be renewed before it expires. Certbot can automatically renew the certificate in the background, but you may need to take steps to enable that functionality. See https://certbot.org/renewal-setup for instructions.
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+If you like Certbot, please consider supporting our work by:
+ * Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
+ * Donating to EFF:                    https://eff.org/donate-le
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+```

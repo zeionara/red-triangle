@@ -6,6 +6,7 @@ from requests import post
 from .OpenChatClient import DEFAULT_MODEL, TIMEOUT, ENCODED_USER_AGENT, encode_agent
 from .CreepyOpenChatClient import make_prompt_for_generating_introduction
 from .Client import Client, MessageHistory
+from .util import ask_to_generate_concise_response
 
 
 class CreepyMistralClient(Client):
@@ -74,6 +75,9 @@ class CreepyMistralClient(Client):
                 for message in history
             ]
 
+            if self.concise:
+                messages[-1]['content'] = ask_to_generate_concise_response(messages[-1]['content'])
+
         response = post(
             self.url,
             headers = self.headers,
@@ -85,7 +89,8 @@ class CreepyMistralClient(Client):
         )
 
         if len(history) < 1:
-            introduction = self.refine_introduction(response.json()['choices'][0]['message']['content'])
+            introduction = response.json()['choices'][0]['message']['content']
+            # introduction = self.refine_introduction(response.json()['choices'][0]['message']['content'])
 
             return introduction + '\n\n' + story
 
