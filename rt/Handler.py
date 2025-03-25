@@ -2,6 +2,7 @@ from abc import abstractmethod, ABC
 from threading import RLock
 
 from .Client import Client, MessageHistory
+from .MistralClient import MistralClient
 from .CreepyOpenChatClient import CreepyOpenChatClient
 from .CreepyMistralClient import CreepyMistralClient
 from .Agent import Agent
@@ -53,6 +54,10 @@ class Handler(ABC):
             if isinstance(self.client, (CreepyOpenChatClient, CreepyMistralClient)):
                 history.reset()
                 return self.make_response(request, self.client.ask(history))
+            if isinstance(self.client, MistralClient) and len(history.items) > 1:
+                response = self.make_response(request, history.items[-1].text)
+                history.reset()
+                return response
 
             return self.make_response(request, 'Задайте ваш вопрос, а я попробую на него ответить')
         if self.is_help(utterance):
