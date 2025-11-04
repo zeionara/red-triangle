@@ -1,0 +1,10 @@
+t=2025-09-24T06:00:03+0300 lvl=info msg="no configuration paths supplied"
+t=2025-09-24T06:00:03+0300 lvl=info msg="using configuration at default config path" path=/home/zeio/.config/ngrok/ngrok.yml
+t=2025-09-24T06:00:03+0300 lvl=info msg="open config file" path=/home/zeio/.config/ngrok/ngrok.yml err=nil
+t=2025-09-24T06:00:03+0300 lvl=info msg="starting web service" obj=web addr=127.0.0.1:4040 allow_hosts=[]
+t=2025-09-24T06:00:04+0300 lvl=eror msg="failed to reconnect session" obj=tunnels.session err="authentication failed: We do not allow agents to connect to ngrok from your IP address (91.204.150.112).\r\n\r\nERR_NGROK_9040\r\n"
+t=2025-09-24T06:00:04+0300 lvl=eror msg="session closing" obj=tunnels.session err="authentication failed: We do not allow agents to connect to ngrok from your IP address (91.204.150.112).\r\n\r\nERR_NGROK_9040\r\n"
+t=2025-09-24T06:00:04+0300 lvl=info msg="received stop request" obj=app stopReq="{err:{Remote:true Inner:{Inner:0xc0005f0240}} restart:false}"
+t=2025-09-24T06:00:04+0300 lvl=eror msg="terminating with error" obj=app err="authentication failed: We do not allow agents to connect to ngrok from your IP address (91.204.150.112).\r\n\r\nERR_NGROK_9040\r\n"
+t=2025-09-24T06:00:04+0300 lvl=crit msg="command failed" err="authentication failed: We do not allow agents to connect to ngrok from your IP address (91.204.150.112).\r\n\r\nERR_NGROK_9040\r\n"
+t=2025-09-24T06:00:04+0300 lvl=info msg="no more state changes" obj=tunnels.session

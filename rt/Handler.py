@@ -39,6 +39,7 @@ class Handler(ABC):
 
     def handle(self, request: dict, history: MessageHistory, chat: str = None):
         utterance = self.get_utterance(request)
+        print(request)
 
         if self.is_stop(utterance):
             if self.agent is not None:

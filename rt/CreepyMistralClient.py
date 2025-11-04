@@ -59,6 +59,7 @@ class CreepyMistralClient(Client):
         return f'https://{self.host}/v1/chat/completions'
 
     def ask(self, history: MessageHistory):
+        print(history.describe())
         if len(history) < 1:
             story_index = randint(0, self.n_stories - 1)
             story = self.stories[story_index]
@@ -85,7 +86,8 @@ class CreepyMistralClient(Client):
         )
 
         if len(history) < 1:
-            introduction = self.refine_introduction(response.json()['choices'][0]['message']['content'])
+            introduction = response.json()['choices'][0]['message']['content']
+            # introduction = self.refine_introduction(response.json()['choices'][0]['message']['content'])
 
             return introduction + '\n\n' + story
 
